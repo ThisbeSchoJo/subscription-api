@@ -1,3 +1,7 @@
+/**
+ * Nodemailer – SMTP transporter for sending reminder emails.
+ * Uses Gmail; EMAIL_PASSWORD should be an app password for accountEmail.
+ */
 import nodemailer from 'nodemailer';
 
 import { EMAIL_PASSWORD } from './env.js'

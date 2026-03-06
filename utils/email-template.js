@@ -1,3 +1,8 @@
+/**
+ * HTML email templates for subscription reminders. emailTemplates array has one entry per
+ * reminder type (7, 5, 2, 1 days before); each has label, generateSubject, and generateBody
+ * used by send-email.js.
+ */
 export const generateEmailTemplate = ({
     userName,
     subscriptionName,

@@ -1,3 +1,6 @@
+/**
+ * User model – name, email (unique), and hashed password. Used for auth and as owner of subscriptions.
+ */
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({

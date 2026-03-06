@@ -1,3 +1,6 @@
+/**
+ * User routes – under /api/v1/users. List all users (no auth) and get one by id (auth). Others stubs.
+ */
 import { Router } from 'express';
 
 import authorize from '../middlewares/auth.middleware.js'

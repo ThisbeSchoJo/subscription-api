@@ -1,3 +1,7 @@
+/**
+ * MongoDB connection – single connect on startup using DB_URI from env.
+ * Exits the process if connection fails so the app doesn't run without a DB.
+ */
 import mongoose from 'mongoose';
 import { DB_URI, NODE_ENV } from '../config/env.js';
 

@@ -1,3 +1,7 @@
+/**
+ * Sends a subscription reminder email. Type must match a label in email-template.js
+ * (e.g. "7 days before reminder"). Subscription should have user populated (name, email).
+ */
 import { emailTemplates } from './email-template.js'
 import dayjs from 'dayjs'
 import transporter, { accountEmail } from '../config/nodemailer.js'

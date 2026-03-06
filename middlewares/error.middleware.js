@@ -1,36 +1,43 @@
+/**
+ * Global error handler – must be registered after all routes.
+ * Maps Mongoose errors (CastError, duplicate key, ValidationError) to consistent status codes
+ * and response shape { success: false, error: message }. Unknown errors become 500.
+ */
 const errorMiddleware = (err, req, res, next) => {
-    try {
-      let error = { ...err };
-  
-      error.message = err.message;
-  
-      console.error(err);
-  
-      // Mongoose bad ObjectId
-      if (err.name === 'CastError') {
-        const message = 'Resource not found';
-        error = new Error(message);
-        error.statusCode = 404;
-      }
-  
-      // Mongoose duplicate key
-      if (err.code === 11000) {
-        const message = 'Duplicate field value entered';
-        error = new Error(message);
-        error.statusCode = 400;
-      }
-  
-      // Mongoose validation error
-      if (err.name === 'ValidationError') {
-        const message = Object.values(err.errors).map(val => val.message);
-        error = new Error(message.join(', '));
-        error.statusCode = 400;
-      }
-  
-      res.status(error.statusCode || 500).json({ success: false, error: error.message || 'Server Error' });
-    } catch (error) {
-      next(error);
+  try {
+    let error = { ...err };
+
+    error.message = err.message;
+
+    console.error(err);
+
+    // Mongoose bad ObjectId
+    if (err.name === "CastError") {
+      const message = "Resource not found";
+      error = new Error(message);
+      error.statusCode = 404;
     }
-  };
-  
-  export default errorMiddleware;
+
+    // Mongoose duplicate key
+    if (err.code === 11000) {
+      const message = "Duplicate field value entered";
+      error = new Error(message);
+      error.statusCode = 400;
+    }
+
+    // Mongoose validation error
+    if (err.name === "ValidationError") {
+      const message = Object.values(err.errors).map((val) => val.message);
+      error = new Error(message.join(", "));
+      error.statusCode = 400;
+    }
+
+    res
+      .status(error.statusCode || 500)
+      .json({ success: false, error: error.message || "Server Error" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default errorMiddleware;

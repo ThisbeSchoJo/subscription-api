@@ -1,23 +1,24 @@
+/**
+ * Arcjet – request protection (DDoS shield, bot detection, rate limiting).
+ * Used by arcjet.middleware on every request; denied requests get 429 or 403.
+ */
 import arcjet, { shield, detectBot, tokenBucket } from "@arcjet/node";
 import { ARCJET_KEY } from './env.js'
 
 const aj = arcjet({
   key: ARCJET_KEY,
-  characteristics: ["ip.src"],
+  characteristics: ["ip.src"], // Identify clients by source IP for rate limiting
   rules: [
-    // Shield protects app from DDoS attacks
-    shield({ mode: "LIVE" }),
-    // Detects bots and crawlers
+    shield({ mode: "LIVE" }),           // DDoS protection
     detectBot({
       mode: "LIVE",
-      allow: [ "CATEGORY:SEARCH_ENGINE" ],
+      allow: [ "CATEGORY:SEARCH_ENGINE" ], // Allow search engine crawlers; block other bots
     }),
-    // Token bucket limits API usage
     tokenBucket({
       mode: "LIVE",
-      refillRate: 5, // Refill 5 tokens per interval
-      interval: 10, // Refill every 10 seconds
-      capacity: 10, // Bucket capacity of 10 tokens
+      refillRate: 5,   // 5 tokens added per interval
+      interval: 10,    // every 10 seconds
+      capacity: 10,    // max 10 tokens per client
     }),
   ],
 });

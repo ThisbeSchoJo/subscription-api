@@ -1,3 +1,7 @@
+/**
+ * Auth middleware – protects routes by requiring a valid JWT in Authorization: Bearer <token>.
+ * Verifies the token, loads the user from the DB, and attaches req.user for the route handler.
+ */
 import jwt from 'jsonwebtoken'
 
 import { JWT_SECRET } from '../config/env.js'
@@ -8,6 +12,7 @@ const authorize = async (req, res, next) => {
     // Find user, validate token, attach user to request object
     let token;
 
+    // Expect header: Authorization: Bearer <jwt>
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
     }
