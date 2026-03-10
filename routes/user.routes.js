@@ -4,7 +4,8 @@
 import { Router } from 'express';
 
 import authorize from '../middlewares/auth.middleware.js'
-import { getUser, getUsers } from '../controllers/user.controller.js'
+import { inputValidationMiddleware } from '../middlewares/inputvalidation.middleware.js'
+import { getUser, getUsers, createUser, updateUser, deleteUser } from '../controllers/user.controller.js'
 
 const userRouter = Router();
 
@@ -12,10 +13,13 @@ userRouter.get('/', getUsers);
 
 userRouter.get('/:id', authorize, getUser);
 
-userRouter.post('/', (req, res) => res.send({ title: 'CREATE new user' }));
+//FIXME: Implement/fix create user
+userRouter.post('/', inputValidationMiddleware, createUser);
 
-userRouter.put('/:id', (req, res) => res.send({ title: 'UPDATE user' }));
+//TODO: Implement update user (only allow user to update their own account, check in controller) (DONE)
+userRouter.put('/:id', authorize, updateUser);
 
-userRouter.delete('/:id', (req, res) => res.send({ title: 'DELETE user' }));
+//TODO: Implement delete user (only allow user to delete their own account, check in controller) (DONE)
+userRouter.delete('/:id', authorize, deleteUser);
 
 export default userRouter;

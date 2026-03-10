@@ -14,7 +14,26 @@ export const signUp = async (req, res, next) => {
   session.startTransaction();
 
   try {
-    const { name, email, password } = req.body;
+    const body = req.body;
+    if (!body || typeof body !== "object" || Object.keys(body).length === 0) {
+      const error = new Error(
+        "Request body is empty or not JSON. In Postman: Body → raw → JSON, and add header Content-Type: application/json"
+      );
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const { name, email, password } = body;
+    const missing = [].concat(
+      !name ? "name" : [],
+      !email ? "email" : [],
+      !password ? "password" : [],
+    );
+    if (missing.length) {
+      const error = new Error(`Missing required fields: ${missing.join(", ")}`);
+      error.statusCode = 400;
+      throw error;
+    }
 
     // Check if a user already exists
     // Any query needs to be awaited, otherwise it will return a promise
@@ -61,6 +80,16 @@ export const signIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    const missing = [].concat(
+      !email ? "email" : [],
+      !password ? "password" : [],
+    );
+    if (missing.length) {
+      const error = new Error(`Missing required fields: ${missing.join(", ")}`);
+      error.statusCode = 400;
+      throw error;
+    }
+
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -94,5 +123,10 @@ export const signIn = async (req, res, next) => {
   }
 };
 
-/** Not implemented – reserved for future session/token invalidation. */
-export const signOut = async (req, res, next) => {};
+export const signOut = async (req, res, next) => {
+  res.cookie("jwt", "", { maxAge: 0 });
+  res.status(200).json({
+    success: true,
+    message: "User signed out successfully",
+  });
+};

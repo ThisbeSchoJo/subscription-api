@@ -45,20 +45,20 @@ export const sendReminders = serve(async (context) => {
 });
 
 /** Load subscription by id with user populated (name, email) for the reminder email. */
-const fetchSubscription = async (context, subscriptionId) => {
+export const fetchSubscription = async (context, subscriptionId) => {
   return await context.run('get subscription', async () => {
     return Subscription.findById(subscriptionId).populate('user', 'name email');
   })
 }
 
 /** Tell QStash to wake this workflow at the given date – no server polling required. */
-const sleepUntilReminder = async (context, label, date) => {
+export const sleepUntilReminder = async (context, label, date) => {
   console.log(`Sleeping until ${label} reminder at ${date}`);
   await context.sleepUntil(label, date.toDate());
 }
 
 /** Run the reminder step: send email via Nodemailer using the template that matches the label. */
-const triggerReminder = async (context, label, subscription) => {
+export const triggerReminder = async (context, label, subscription) => {
   return await context.run(label, async () => {
     console.log(`Triggering ${label} reminder`);
 
@@ -68,4 +68,12 @@ const triggerReminder = async (context, label, subscription) => {
       subscription,
     })
   })
+}
+
+export const updateReminder = async (context, label, subscription) => {
+// TODO: Implement update reminder workflow step, which will be triggered when a subscription is updated (e.g. renewal date changes). This should update the scheduled reminders in QStash to match the new renewal date.
+}
+
+export const deleteReminder = async (context, label, subscription) => {
+// TODO: Implement delete reminder workflow step, which will be triggered when a subscription is cancelled or deleted. This should remove any scheduled reminders in QStash for that subscription.
 }
