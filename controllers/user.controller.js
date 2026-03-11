@@ -68,7 +68,7 @@ export const updateUser = async (req, res, next) => {
     
     // Update the user with the provided data (name, email, password)
     const updatedData = req.body;
-    const updatedUser = await User.find
+    const updatedUser = await User
       .findByIdAndUpdate(userId, updatedData, { new: true, runValidators: true })
       .select('-password'); // Exclude password from the response
 

@@ -17,6 +17,7 @@ userRouter.get('/:id', authorize, getUser);
 userRouter.post('/', inputValidationMiddleware, createUser);
 
 //TODO: Implement update user (only allow user to update their own account, check in controller) (DONE)
+//TODO: Implement passwordValidation(include min character count, etc.) in middleware -- updateUser and deleteUser should use password not authorize
 userRouter.put('/:id', authorize, updateUser);
 
 //TODO: Implement delete user (only allow user to delete their own account, check in controller) (DONE)
