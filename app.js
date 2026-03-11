@@ -70,10 +70,10 @@ app.get('/', (req, res) => {
 app.listen(PORT || 3000, async () => {
   console.log(`Subscription Tracker API is running on http://localhost:${PORT || 3000}`);
 
-  // await connectToDatabase();
+  await connectToDatabase();
 });
 
 export default app;
 
-//TODO: add helmet, rate limiters, XSS protection, sanitization (express mongo sanitization?)
-//TODO: fix refresh token
+//TODO: add helmet, rate limiters, XSS protection, sanitization (done)
+//TODO: fix refresh token (done)
