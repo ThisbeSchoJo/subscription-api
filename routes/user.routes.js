@@ -6,21 +6,23 @@ import { Router } from 'express';
 import authorize from '../middlewares/auth.middleware.js'
 import { inputValidationMiddleware } from '../middlewares/inputvalidation.middleware.js'
 import { getUser, getUsers, createUser, updateUser, deleteUser } from '../controllers/user.controller.js'
+import { getUsersLimiter, getUserLimiter, createUserLimiter, updateUserLimiter, deleteUserLimiter } from '../middlewares/rateLimiter.middleware.js';
 
 const userRouter = Router();
 
-userRouter.get('/', getUsers);
+//TODO: rate limiter should be high (20-50) (DONE)
+userRouter.get('/', getUsersLimiter, getUsers);
 
-userRouter.get('/:id', authorize, getUser);
+//TODO: rate limiter should be high (10-20) (DONE)
+userRouter.get('/:id', authorize, getUserLimiter, getUser);
 
-//FIXME: Implement/fix create user
-userRouter.post('/', inputValidationMiddleware, createUser);
+//TODO: rate limiter lower (5-10) (DONE)
+userRouter.post('/', inputValidationMiddleware, createUserLimiter, createUser);
 
-//TODO: Implement update user (only allow user to update their own account, check in controller) (DONE)
-//TODO: Implement passwordValidation(include min character count, etc.) in middleware -- updateUser and deleteUser should use password not authorize
-userRouter.put('/:id', authorize, updateUser);
+//TODO: rate limiter lower (5-10) (DONE)
+userRouter.put('/:id', authorize, updateUserLimiter, updateUser);
 
-//TODO: Implement delete user (only allow user to delete their own account, check in controller) (DONE)
-userRouter.delete('/:id', authorize, deleteUser);
+//TODO: rate limiter lower (5-10) (DONE)
+userRouter.delete('/:id', authorize, deleteUserLimiter, deleteUser);
 
 export default userRouter;

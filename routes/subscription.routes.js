@@ -14,29 +14,34 @@ import {
   cancelSubscription,
   getUpcomingRenewals
 } from "../controllers/subscription.controller.js";
-
+import { 
+  getAllSubscriptionsLimiter,
+  getSubscriptionByIdLimiter,
+  createSubscriptionLimiter, 
+  updateSubscriptionLimiter, 
+  deleteSubscriptionLimiter, 
+  getUserSubscriptionsLimiter,
+  cancelSubscriptionLimiter, 
+  getUpcomingRenewalsLimiter 
+} from "../middlewares/rateLimiter.middleware.js";
 const subscriptionRouter = Router();
 
-// TODO: DONE
-subscriptionRouter.get("/", authorize, getAllSubscriptions);
+// TODO: should not be able to create, delete, update a lot of subscriptions at one time (implement ratelimiter middleware) (5-10 limit) (DONE)
+// TODO: GET actions -  rate limits can be higher (20-50)
+subscriptionRouter.get("/", authorize, getAllSubscriptionsLimiter, getAllSubscriptions);
 
-// TODO: DONE
-subscriptionRouter.get("/:id", authorize, getSubscriptionById);
+subscriptionRouter.get("/:id", authorize, getSubscriptionByIdLimiter, getSubscriptionById);
 
-subscriptionRouter.post("/", authorize, createSubscription);
+subscriptionRouter.post("/", authorize, createSubscriptionLimiter, createSubscription);
 
-// TODO: DONE
-subscriptionRouter.put("/:id", authorize, updateSubscription);
+subscriptionRouter.put("/:id", authorize, updateSubscriptionLimiter, updateSubscription);
 
-// TODO: DONE
-subscriptionRouter.delete("/:id", authorize, deleteSubscription);
+subscriptionRouter.delete("/:id", authorize, deleteSubscriptionLimiter, deleteSubscription);
 
-subscriptionRouter.get("/user/:id", authorize, getUserSubscriptions);
+subscriptionRouter.get("/user/:id", authorize, getUserSubscriptionsLimiter, getUserSubscriptions);
 
-// TODO: DONE
-subscriptionRouter.put("/:id/cancel", authorize, cancelSubscription);
+subscriptionRouter.put("/:id/cancel", authorize, cancelSubscriptionLimiter, cancelSubscription);
 
-// TODO: DONE
-subscriptionRouter.get("/upcoming-renewals", authorize, getUpcomingRenewals);
+subscriptionRouter.get("/upcoming-renewals", authorize, getUpcomingRenewalsLimiter, getUpcomingRenewals);
 
 export default subscriptionRouter;

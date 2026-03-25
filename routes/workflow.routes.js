@@ -5,13 +5,16 @@
  */
 import { Router} from 'express';
 import { sendReminders, updateReminder, deleteReminder } from '../controllers/workflow.controller.js'
+import { sendRemindersLimiter, updateReminderLimiter, deleteReminderLimiter } from '../middlewares/rateLimiter.middleware.js';
 
 const workflowRouter = Router();
 
-workflowRouter.post('/subscription/reminder', sendReminders);
+//TODO: ratelimiter (10-30) (DONE)
+workflowRouter.post('/subscription/reminder', sendRemindersLimiter, sendReminders);
 
-// TODO: Implement other workflows (delete, update, etc.) (DONE)
-workflowRouter.post('/subscription/update-reminder', updateReminder);
+//TODO: ratelimiter (5-10) (DONE)
+workflowRouter.post('/subscription/update-reminder', updateReminderLimiter, updateReminder);
 
-workflowRouter.post('/subscription/delete-reminder', deleteReminder);
+//TODO: ratelimiter (5-10) (DONE)
+workflowRouter.post('/subscription/delete-reminder', deleteReminderLimiter, deleteReminder);
 export default workflowRouter;

@@ -22,6 +22,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 
 const app = express();
 
+// TODO: each route should have its own rate limiter -- create a rate limiter as a middleware
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   limit: 100,               // limit each IP to 100 requests per window
